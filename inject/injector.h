@@ -219,17 +219,15 @@ void erase_discardable_sect(PVOID p_module_base, PIMAGE_NT_HEADERS nt_head)
 	}
 }
 
-void mem(LPCSTR window_class_name)
+void mem(LPCSTR window_class_name, LPCWSTR dll_path)
 {
 	// all this shit is from faceit
-
-
-	// get dll file
-	void* dll_alloc_base = malloc(sizeof(rawData));
-	memcpy(dll_alloc_base, rawData, sizeof(rawData));
-	PVOID dll_image = dll_alloc_base;
+	PVOID dll_image = get_dll_by_file(dll_path);
+	if (!dll_image)
+		printf(xor_a("invalid dll\n"));
 	// parse nt header
 	PIMAGE_NT_HEADERS dll_nt_head = RtlImageNtHeader(dll_image);
+	if (!dll_nt_head)
 	// get process id & thread id
 	DWORD thread_id;
 	DWORD process_id = get_process_id_and_thread_id_by_window_class(window_class_name, &thread_id);
@@ -253,7 +251,7 @@ void mem(LPCSTR window_class_name)
 		call_dll_main(thread_id, allocate_base, dll_nt_head, false);
 		erase_discardable_sect(allocate_base, dll_nt_head);
 		VirtualFree(dll_image, 0, MEM_RELEASE);
-		free(dll_alloc_base);
+		//free(dll_alloc_base);
 		cout << endl;
 	}
 	else

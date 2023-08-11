@@ -122,7 +122,7 @@ using namespace std;
 			std::cout << xor_a("\n\n  [+] Starting...");
 			LI_FN(Sleep)(500);
 			LI_FN(Beep)(200, 200);
-			mem(xor_a("UnityWndClass"));
+			mem(xor_a("UnityWndClass"), xor_w(L"inj.dll"));
 			MessageBoxA(NULL, xor_a("Mod Started"), xor_a("??"), MB_OK);
 		}
 
